@@ -12,6 +12,9 @@ class Board:
         for pos in self.occupied_pos:
             r, c = pos
             self.positions[r][c].change_color()
+
+        for pos in self.occupied_pos:
+            r, c = pos
             while self.positions[r][c].is_occupied():
                 ant = self.positions[r][c].move_ant()
                 if ant is not None:

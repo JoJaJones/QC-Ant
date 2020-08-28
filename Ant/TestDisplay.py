@@ -16,23 +16,30 @@ for row in range(NUM_ROWS):
     test_board_positions.append([])
     for col in range(NUM_COLS):
         test_board_positions[row].append(Position())
-test_ant = Ant(pos=(25, 25), direction=LEFT)
-pos = test_ant.get_pos()
-r, c = pos
-test_board_positions[r][c].add_ant(test_ant, ALIVE)
+ant_starts = [(19, 19), (19, 22), (22, 22), (22, 19)]
+directions = [UP, RIGHT, DOWN, LEFT]
 test_board = Board()
+ant_list = []
+
+for index, ant_pos in enumerate(ant_starts):
+    test_ant = Ant(pos=ant_pos, direction = directions[index])
+    ant_list.append(test_ant)
+    pos = test_ant.get_pos()
+    r, c = pos
+    test_board_positions[r][c].add_ant(test_ant, ALIVE)
+    test_board.occupied_pos += [test_ant.get_pos()]
+
 test_board.positions = test_board_positions
-test_board.occupied_pos = [test_ant.get_pos()]
+
 
 displayObj = ScreenDisplay(test_board_positions)
 displayObj.render(test_board_positions)
-for i in range(15000):
+while True:
     # sleep(.1)
     print(f"\033[2J\033[H")
     test_board.move_all_ants()
-    if i > 9900:
-        displayObj.render(test_board_positions)
-        sleep(.1)
+    displayObj.render(test_board_positions)
+    sleep(.25)
         # sleep(.1)
 
 input()
