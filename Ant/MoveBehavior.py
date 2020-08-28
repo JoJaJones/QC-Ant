@@ -16,3 +16,6 @@ class MoveBehavior:
 
     def get_move_dist(self):
         return self._move_distance
+
+    def get_move_distance(self):
+        return self._move_distance

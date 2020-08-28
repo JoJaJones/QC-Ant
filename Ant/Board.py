@@ -19,7 +19,8 @@ class Board:
                     if ant.is_dead():
                         self.positions[ant_r][ant_c].add_ant(ant, DEAD)
                     else:
-                        self.positions[ant_r][ant_c].add_ant(ant, ALIVE)
+                        ant.change_direction(self.positions[ant_r][ant_c].get_color(False))
+                        self.positions[ant_r][ant_c].add_ant(ant, NEW)
                         new_pos.add((ant_r, ant_c))
 
         for pos in new_pos:
