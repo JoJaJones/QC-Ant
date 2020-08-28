@@ -8,7 +8,7 @@ class Position:
         self.color = color
         self.first_change = True
         self.second_visit = False
-        self.first_color = "red"
+        self.first_color = "white"
         self.ant_color = ant_color
         self.old_ants = []
         self.new_ants = []
