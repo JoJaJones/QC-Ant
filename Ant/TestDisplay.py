@@ -28,9 +28,9 @@ displayObj = ScreenDisplay(test_board_positions)
 displayObj.render(test_board_positions)
 for i in range(15000):
     # sleep(.1)
-    print("\033[2J\033[H")
+    print(f"\033[2J\033[H")
     test_board.move_all_ants()
-    if i % 10 == 0 and i > 10000:
+    if i > 9900:
         displayObj.render(test_board_positions)
         sleep(.1)
         # sleep(.1)
