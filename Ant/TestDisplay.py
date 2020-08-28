@@ -30,8 +30,10 @@ for i in range(12000):
     # sleep(.1)
     print("\033[2J\033[H")
     test_board.move_all_ants()
-    displayObj.render(test_board_positions)
-    sleep(.05)
+    if i % 25 == 0:
+        
+        displayObj.render(test_board_positions)
+        sleep(.5)
         # sleep(.1)
 
 input()
