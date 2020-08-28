@@ -44,14 +44,14 @@ class Position:
 
     def get_color(self, for_display: bool = True): # todo (first change color)
         if len(self.old_ants) + len(self.dead_ants) > 0 and for_display:
-            if self.second_visit:
-                self.second_visit = False
+            # if self.second_visit:
+            #     self.second_visit = False
             return self.ant_color
         else:
-            if for_display and self.first_change and self.color != "black":
-                self.first_change = False
-                self.second_visit = True
-                return self.first_color
-            elif for_display and self.second_visit:
-                return self.first_color
+            # if for_display and self.first_change and self.color != "black":
+            #     self.first_change = False
+            #     self.second_visit = True
+            #     return self.first_color
+            # elif for_display and self.second_visit:
+            #     return self.first_color
             return self.color
