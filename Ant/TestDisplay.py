@@ -31,7 +31,7 @@ for i in range(12000):
     print("\033[2J\033[H")
     test_board.move_all_ants()
     displayObj.render(test_board_positions)
-
+    sleep(.05)
         # sleep(.1)
 
 input()
