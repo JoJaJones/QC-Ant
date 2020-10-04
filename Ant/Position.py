@@ -46,7 +46,7 @@ class Position:
         if len(self.old_ants) + len(self.dead_ants) > 0 and for_display:
             # if self.second_visit:
             #     self.second_visit = False
-            return self.ant_color
+            return self.ant_color  # todo modify to return Ant color
         else:
             # if for_display and self.first_change and self.color != "black":
             #     self.first_change = False

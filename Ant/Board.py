@@ -3,9 +3,15 @@ from Position import Position
 from constants import *
 
 class Board:
-    def __init__(self):
-        self.occupied_pos = []
+    def __init__(self, ant_list: list = None):
+        self.occupied_pos = set()
         self.positions = []
+
+        self.init_board()
+
+        if ant_list is not None:
+            for ant in ant_list:
+                self.add_ant(ant)
 
     def move_all_ants(self):
         new_pos = set()
@@ -30,5 +36,20 @@ class Board:
             r, c = pos
             self.positions[r][c].finalize_pos()
 
-        self. occupied_pos = list(new_pos)
+        self.occupied_pos = new_pos
+
+    def init_board(self):
+        for r in range(NUM_ROWS):
+            self.positions.append([])
+
+            for c in range(NUM_COLS):
+                self.positions[r].append(Position())
+
+    def add_ant(self, ant: Ant):
+        r, c = pos = ant.get_pos()
+        self.positions[r][c].add_ant(ant)
+        self.occupied_pos.add(pos)
+
+    def get_positions(self):
+        return self.positions
 

@@ -5,13 +5,17 @@ from constants import *
 
 class Ant:
     def __init__(self, speed = 1, edge_type = "T", turn_type = 1, pos = (0,1), direction = UP, num_colors = 2,
-                 color_list = ["white", "black"]):
-        self.direction = direction
-        self.pos = pos
-        self.turn_behavior = TurnBehavior(turn_type, num_colors, color_list)
-        self.move_behavior = MoveBehavior(speed)
-        if edge_type == "T":
-            self.edge_behavior = TeleportEdgeBx(self.turn_behavior, self.move_behavior, NUM_ROWS, NUM_COLS)
+                 color_list = ["white", "black"], color="blue", setting_dict=None):
+        if setting_dict is None:
+            self.direction = direction
+            self.pos = pos
+            self.turn_behavior = TurnBehavior(turn_type, num_colors, color_list)
+            self.move_behavior = MoveBehavior(speed)
+            self.color = color
+            if edge_type == "T":
+                self.edge_behavior = TeleportEdgeBx(self.turn_behavior, self.move_behavior, NUM_ROWS, NUM_COLS)
+        else:
+            pass
 
     def move_ant(self, color):
         # move logic
