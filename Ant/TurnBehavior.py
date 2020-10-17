@@ -1,7 +1,8 @@
 from constants import DIRECTIONS
 
+
 class TurnBehavior:
-    def __init__(self, turn_type = 1, num_colors = 2, color_list = ["white", "black"]):
+    def __init__(self, turn_type=1, num_colors=2, color_list=["white", "black"]):
         self._num_colors = num_colors
         self._turn_type = turn_type
         #load dir converter

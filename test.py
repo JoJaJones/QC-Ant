@@ -1,6 +1,6 @@
-fibs = [1,1]
-for i in range(50):
-    if i == len(fibs):
-        fibs.append(fibs[-1] + fibs[-2])
+d = {0: 1, 1: 2, 2: 3}
 
-    print(fibs[i])
+c = dict(d.items())
+print(c)
+c[0] = 5
+print("", c, "\n", d)

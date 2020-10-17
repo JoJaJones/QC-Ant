@@ -1,11 +1,30 @@
 from Board import Board
 from Display import ScreenDisplay
+from random import randint, choice
 from constants import *
 
 class Menu:
     def __init__(self):
         self.board = Board()
         self.display = ScreenDisplay(self.board.get_positions())
+        self.settings_funct_dict = {
+            "1": self.get_pos,
+            "2": self.get_dir,
+            "3": self.get_ant_color
+        }
+
+    def get_pos(self, ant_settings, random_select: bool = False):
+        row = self.get_valid_int(PROMPT_DICT[POS][0], 0, NUM_ROWS - 1, random_select)
+        col = self.get_valid_int(PROMPT_DICT[POS][1], 0, NUM_COLS - 1, random_select)
+        ant_settings[POS] = row, col
+
+    def get_dir(self, ant_settings, random_select: bool = False):
+        prompt = self.generate_prompt_from_dictionary(PROMPT_DICT[DIR], list(DIR_OPTIONS.keys()))
+        ant_settings[DIR] = self.get_valid_from_list(prompt, dict(DIR_OPTIONS.items()), random_select)
+
+    def get_ant_color(self, ant_settings, random_select: bool = False):
+        prompt = self.generate_prompt_from_dictionary(PROMPT_DICT[COLOR], list(ANT_COLOR_OPTIONS.keys()))
+        ant_settings[COLOR] = self.get_valid_from_list(prompt, dict(ANT_COLOR_OPTIONS.items()), random_select)
 
     def main_menu(self):
         run = True
@@ -59,25 +78,57 @@ class Menu:
         ant_settings = self.generate_default_ant_dict()
         if default_color:
             ant_settings[COLOR] = default_color
-        num_to_choose = 3
+
         choice = None
-        while num_to_choose > 0 and choice != "R" and choice != "D":
-            pass
-        row = self.get_valid_int(PROMPT_DICT[POS][0], 0, NUM_ROWS - 1)
-        col = self.get_valid_int(PROMPT_DICT[POS][1], 0, NUM_COLS - 1)
-        ant_settings[POS] = row, col
-        ant_settings[DIR] = self.get_valid_from_list(PROMPT_DICT[DIR], DIR_OPTIONS)
-        ant_settings[COLOR] = self.get_valid_from_list(PROMPT_DICT[COLOR], ANT_COLOR_OPTIONS)
+        remaining_settings_to_choose = dict(ANT_SETTING_CHOICE.items())
+        while len(remaining_settings_to_choose) > 2 and choice != "R" and choice != "D":
+            prompt = self.generate_prompt_from_dictionary(PROMPT_DICT[SETTING_CHOICE], remaining_settings_to_choose)
+            choice = self.get_valid_from_list(prompt, remaining_settings_to_choose)
+
+            if choice == "R":
+                self.generate_random_settings(ant_settings, PROMPT_DICT, remaining_settings_to_choose)
+            elif choice != "D":
+                self.settings_funct_dict[choice](ant_settings)
+                del remaining_settings_to_choose[choice]
 
         return ant_settings
 
-    def get_valid_int(self, prompt: str, min = None, max = None) -> int:
+    def generate_prompt_from_dictionary(self, prompt_header: str, list_of_keys: list) -> str:
+        pass
+
+    def get_valid_int(self, prompt: str, min_val: int = None, max_val: int = None, random_choice: bool = False) -> int:
+        if not random_choice:
+            is_valid = False
+            while not is_valid:
+                is_valid = True
+                try:
+                    selection = int(input(prompt))
+                except:
+                    is_valid = False
+
+                if is_valid:
+                    is_valid = self.is_num_valid(selection, min_val, max_val)
+        else:
+            selection = randint(min_val, max_val)
+
+        return selection
+
+    def is_num_valid(self, num, min_val = None, max_val = None):
+        if min_val is not None and num < min_val:
+            return False
+
+        if max_val is not None and num < max_val:
+            return False
+
+        if type(num) != int and type(num) != float:
+            return False
+
+        return True
+
+    def get_valid_char(self, prompt: str, valid_choices) -> str:
         raise NotImplementedError
 
-    def get_valid_char(self, prompt: str) -> str:
-        raise NotImplementedError
-
-    def get_valid_from_list(self, prompt: str, valid_options: dict):
+    def get_valid_from_list(self, prompt: str, valid_options: dict, random_choice: bool = False):
         raise NotImplementedError
 
     def design_menu(self):
@@ -136,6 +187,12 @@ class Menu:
             # logic for setting up design
         # use chosen options to setup the sim
         raise NotImplementedError
+
+    def generate_random_settings(self, settings_dict: dict, remaining_settings: dict):
+        # settings_dict: is the settings we'll send to ant
+        # remaining_settings: is the settings we still have to choose randomly
+        for key in remaining_settings:
+            self.settings_funct_dict[key](settings_dict, True)
 
     def generate_symmetrical_ants(self, option: dict, num_axes: int) -> list:
         pass

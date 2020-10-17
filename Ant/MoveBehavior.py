@@ -14,8 +14,5 @@ class MoveBehavior:
     def set_move_dist(self, new_move_distance: int = 0):
         self._move_distance = new_move_distance
 
-    def get_move_dist(self):
-        return self._move_distance
-
     def get_move_distance(self):
         return self._move_distance
