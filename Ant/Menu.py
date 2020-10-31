@@ -22,7 +22,8 @@ class Menu:
         prompt = self.generate_prompt_from_dictionary(PROMPT_DICT[DIR], list(DIR_OPTIONS.keys()))
         ant_settings[DIR] = self.get_valid_from_list(prompt, dict(DIR_OPTIONS.items()), random_select)
 
-    def get_ant_color(self, ant_settings, random_select: bool = False):
+    # TODO add functionality for limited color choices (maybe)
+    def get_ant_color(self, ant_settings, random_select: bool = False, color_options = None):
         prompt = self.generate_prompt_from_dictionary(PROMPT_DICT[COLOR], list(ANT_COLOR_OPTIONS.keys()))
         ant_settings[COLOR] = self.get_valid_from_list(prompt, dict(ANT_COLOR_OPTIONS.items()), random_select)
 
@@ -65,7 +66,6 @@ class Menu:
             num_steps -= 1
 
     def setup_ant_sim(self):
-        # TODO implment
         raise NotImplementedError
 
     def make_ant(self, settings: dict = None):
@@ -90,11 +90,26 @@ class Menu:
             elif choice != "D":
                 self.settings_funct_dict[choice](ant_settings)
                 del remaining_settings_to_choose[choice]
+            elif choice == "3":
+                # TODO add limited color options functionality
+                self.settings_funct_dict[choice](ant_settings)
+            else:
+                self.settings_funct_dict[choice](ant_settings)
 
         return ant_settings
 
-    def generate_prompt_from_dictionary(self, prompt_header: str, list_of_keys: list) -> str:
-        pass
+    def generate_prompt_from_dictionary(self, prompt_header: dict, list_of_keys: list = None) -> str:
+        prompt = prompt_header[PROMPT]
+
+        if list_of_keys is not None:
+            options_to_add = list_of_keys
+        else:
+            options_to_add = list(prompt_header[OPTIONS].keys())
+
+        for option in options_to_add:
+            prompt += f"{option} - {prompt_header[OPTIONS][option]}\n"
+
+        return prompt
 
     def get_valid_int(self, prompt: str, min_val: int = None, max_val: int = None, random_choice: bool = False) -> int:
         if not random_choice:
@@ -126,10 +141,17 @@ class Menu:
         return True
 
     def get_valid_char(self, prompt: str, valid_choices) -> str:
-        raise NotImplementedError
+        res = ""
+        while len(res) < 1 or not res[0].upper() not in valid_choices:
+            res = input(prompt)
+
+        return res[0]
 
     def get_valid_from_list(self, prompt: str, valid_options: dict, random_choice: bool = False):
-        raise NotImplementedError
+        # get list of options from dict, call get_valid_char
+        valid_choices = list(valid_options.keys())
+        choice = self.get_valid_char(prompt, valid_choices)
+        return choice
 
     def design_menu(self):
         # present the options
@@ -189,13 +211,11 @@ class Menu:
         raise NotImplementedError
 
     def generate_random_settings(self, settings_dict: dict, remaining_settings: dict):
-        # settings_dict: is the settings we'll send to ant
-        # remaining_settings: is the settings we still have to choose randomly
         for key in remaining_settings:
             self.settings_funct_dict[key](settings_dict, True)
 
     def generate_symmetrical_ants(self, option: dict, num_axes: int) -> list:
-        pass
+        raise NotImplementedError
 
     def generate_default_ant_dict(self) -> dict:
         ant_dict = {}
